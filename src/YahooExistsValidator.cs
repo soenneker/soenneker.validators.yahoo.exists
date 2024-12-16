@@ -72,7 +72,8 @@ public class YahooExistsValidator : Validator.Validator, IYahooExistsValidator
 
     private static async Task<(string CookieString, string SessionIndex)?> GetCookiesAndSessionIndex(HttpClient client, CancellationToken cancellationToken)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, _signUpPage) {Headers = {{"User-Agent", _userAgent}}};
+        using var request = new HttpRequestMessage(HttpMethod.Get, _signUpPage);
+        request.Headers.Add("User-Agent", _userAgent);
         HttpResponseMessage response = await client.SendAsync(request, cancellationToken).NoSync();
 
         response.EnsureSuccessStatusCode();
