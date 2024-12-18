@@ -2,7 +2,7 @@ using Soenneker.Facts.Local;
 using Soenneker.Validators.Yahoo.Exists.Abstract;
 using Soenneker.Tests.FixturedUnit;
 using Xunit;
-using Xunit.Abstractions;
+
 using System.Threading.Tasks;
 using FluentAssertions;
 
