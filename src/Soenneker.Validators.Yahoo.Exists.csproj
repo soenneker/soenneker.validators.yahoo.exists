@@ -14,7 +14,7 @@
         <AssemblyName>Soenneker.Validators.Yahoo.Exists</AssemblyName>
         <PackageId>Soenneker.Validators.Yahoo.Exists</PackageId>
         <PackageTags>validators yahoo exists validator email yahooexistsvalidator csharp dotnet c# .net</PackageTags>
-        <Copyright>Copyright © 2024 Jake Soenneker</Copyright>
+        <Copyright>Copyright © 2024-2025 Jake Soenneker</Copyright>
         <Authors>Jake Soenneker</Authors>
         <Company>https://soenneker.com</Company>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
