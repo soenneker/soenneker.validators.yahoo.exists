@@ -14,20 +14,24 @@ public static class YahooExistsValidatorRegistrar
     /// <summary>
     /// Adds <see cref="IYahooExistsValidator"/> as a singleton service. <para/>
     /// </summary>
-    public static void AddYahooExistsValidatorAsSingleton(this IServiceCollection services)
+    public static IServiceCollection AddYahooExistsValidatorAsSingleton(this IServiceCollection services)
     {
-        services.AddRateLimitingFactoryAsSingleton();
-        services.AddHttpClientCache();
-        services.TryAddSingleton<IYahooExistsValidator, YahooExistsValidator>();
+        services.AddRateLimitingFactoryAsSingleton()
+                .AddHttpClientCacheAsSingleton()
+                .TryAddSingleton<IYahooExistsValidator, YahooExistsValidator>();
+
+        return services;
     }
 
     /// <summary>
     /// Adds <see cref="IYahooExistsValidator"/> as a scoped service. <para/>
     /// </summary>
-    public static void AddYahooExistsValidatorAsScoped(this IServiceCollection services)
+    public static IServiceCollection AddYahooExistsValidatorAsScoped(this IServiceCollection services)
     {
-        services.AddRateLimitingFactoryAsSingleton();
-        services.AddHttpClientCache();
-        services.TryAddScoped<IYahooExistsValidator, YahooExistsValidator>();
+        services.AddRateLimitingFactoryAsSingleton()
+                .AddHttpClientCacheAsSingleton()
+                .TryAddScoped<IYahooExistsValidator, YahooExistsValidator>();
+
+        return services;
     }
 }
