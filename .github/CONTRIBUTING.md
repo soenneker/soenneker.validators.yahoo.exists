@@ -1,4 +1,4 @@
-# Contributing to Soenneker.Validators.Yahoo.Exists
+﻿# Contributing to Soenneker.Validators.Yahoo.Exists
 
 We're excited that you're interested in contributing!
 
