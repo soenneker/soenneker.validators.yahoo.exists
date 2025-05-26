@@ -4,7 +4,7 @@ using Soenneker.Tests.FixturedUnit;
 using Xunit;
 
 using System.Threading.Tasks;
-using FluentAssertions;
+using AwesomeAssertions;
 
 namespace Soenneker.Validators.Yahoo.Exists.Tests;
 
