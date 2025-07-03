@@ -19,7 +19,7 @@ using Soenneker.Validators.Yahoo.Exists.Utils;
 namespace Soenneker.Validators.Yahoo.Exists;
 
 ///<inheritdoc cref="IYahooExistsValidator"/>
-public class YahooExistsValidator : Validator.Validator, IYahooExistsValidator
+public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsValidator
 {
     private const string _signUpPage = "https://login.yahoo.com/account/create?specId=yidReg&lang=en-US&src=&done=https%3A%2F%2Fwww.yahoo.com&display=login";
     private const string _signUpApi = "https://login.yahoo.com/account/module/create?validateField=yid";
