@@ -141,13 +141,11 @@ public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsVali
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
         _httpClientCache.RemoveSync(nameof(YahooExistsValidator));
     }
 
     public ValueTask DisposeAsync()
     {
-        GC.SuppressFinalize(this);
         return _httpClientCache.Remove(nameof(YahooExistsValidator));
     }
 }
