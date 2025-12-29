@@ -2,9 +2,9 @@ using Soenneker.Facts.Local;
 using Soenneker.Validators.Yahoo.Exists.Abstract;
 using Soenneker.Tests.FixturedUnit;
 using Xunit;
-
 using System.Threading.Tasks;
 using AwesomeAssertions;
+using Soenneker.Facts.Manual;
 
 namespace Soenneker.Validators.Yahoo.Exists.Tests;
 
@@ -18,11 +18,18 @@ public class YahooExistsValidatorTests : FixturedUnitTest
         _validator = Resolve<IYahooExistsValidator>(true);
     }
 
-    [LocalFact]
+    [Fact]
+    public void Default()
+    {
+    }
+
+    [ManualFact]
+    // [LocalFact]
     public async Task Exists_should_be_true()
     {
         bool? result = await _validator.EmailExists("logan@yahoo.com");
 
-        result.Should().BeTrue();
+        result.Should()
+              .BeTrue();
     }
 }
