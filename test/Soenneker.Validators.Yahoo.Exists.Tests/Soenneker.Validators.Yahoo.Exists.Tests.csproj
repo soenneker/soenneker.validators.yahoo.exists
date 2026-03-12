@@ -27,7 +27,7 @@
     <PackageReference Include="xUnit.v3" Version="3.2.2" /></ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.Validators.Yahoo.Exists.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Validators.Yahoo.Exists\Soenneker.Validators.Yahoo.Exists.csproj" />
     </ItemGroup>
 
     <ItemGroup>
