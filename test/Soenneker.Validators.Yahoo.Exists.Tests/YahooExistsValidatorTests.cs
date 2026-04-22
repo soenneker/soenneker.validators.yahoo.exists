@@ -3,7 +3,6 @@ using Soenneker.Validators.Yahoo.Exists.Abstract;
 using Soenneker.Tests.HostedUnit;
 using System.Threading.Tasks;
 using AwesomeAssertions;
-using Soenneker.Facts.Manual;
 
 namespace Soenneker.Validators.Yahoo.Exists.Tests;
 
@@ -22,7 +21,7 @@ public class YahooExistsValidatorTests : HostedUnitTest
     {
     }
 
-    [ManualFact]
+    [Skip("Manual")]
     // [LocalOnly]
     public async Task Exists_should_be_true()
     {
