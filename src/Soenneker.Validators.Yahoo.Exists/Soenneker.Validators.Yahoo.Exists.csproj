@@ -44,10 +44,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Soenneker.Extensions.Configuration" Version="4.0.814" />
+        <PackageReference Include="Soenneker.Extensions.Configuration" Version="4.0.816" />
         <PackageReference Include="Soenneker.Extensions.HttpClient" Version="4.0.3762" />
-        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="4.0.1931" />
-        <PackageReference Include="Soenneker.Utils.RateLimiting.Factory" Version="4.0.1074" />
+        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="4.0.1932" />
+        <PackageReference Include="Soenneker.Utils.RateLimiting.Factory" Version="4.0.1075" />
         <PackageReference Include="Soenneker.Validators.Validator" Version="4.0.724" />
     </ItemGroup>
 </Project>
