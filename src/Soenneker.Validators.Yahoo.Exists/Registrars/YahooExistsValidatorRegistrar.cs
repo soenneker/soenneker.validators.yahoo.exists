@@ -14,6 +14,8 @@ public static class YahooExistsValidatorRegistrar
     /// <summary>
     /// Adds <see cref="IYahooExistsValidator"/> as a singleton service. <para/>
     /// </summary>
+    /// <param name="services">Service collection that receives the registration.</param>
+    /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddYahooExistsValidatorAsSingleton(this IServiceCollection services)
     {
         services.AddRateLimitingFactoryAsSingleton()
@@ -26,6 +28,8 @@ public static class YahooExistsValidatorRegistrar
     /// <summary>
     /// Adds <see cref="IYahooExistsValidator"/> as a scoped service. <para/>
     /// </summary>
+    /// <param name="services">Service collection that receives the registration.</param>
+    /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddYahooExistsValidatorAsScoped(this IServiceCollection services)
     {
         services.AddRateLimitingFactoryAsSingleton()
