@@ -5,7 +5,7 @@
 
 # Soenneker.Validators.Yahoo.Exists
 
-A validation module checking for Yahoo account existence.
+Applies an undocumented Yahoo signup-response heuristic to a supplied address's local part.
 
 ## Install
 
@@ -13,38 +13,51 @@ A validation module checking for Yahoo account existence.
 dotnet add package Soenneker.Validators.Yahoo.Exists
 ```
 
-## Quick start
+## Registration
 
 ```csharp
 using Soenneker.Validators.Yahoo.Exists.Registrars;
 using Microsoft.Extensions.DependencyInjection;
 
-var services = new ServiceCollection();
-var result = services.AddYahooExistsValidatorAsSingleton();
+services.AddYahooExistsValidatorAsSingleton();
 ```
 
-Adds `IYahooExistsValidator` as a singleton service.
+Scoped registration is also available. Both registrations reuse singleton HTTP-client-cache and rate-limiter-factory services. Disposing a scoped validator leaves the shared named HTTP client alive.
 
-## What you get
+## Configure request spacing
 
-- `IYahooExistsValidator` — A validation module checking for Yahoo account existence.
-- `YahooExistsValidatorRegistrar` — A validation module checking for Yahoo account existence.
-- `YahooEmailExistsItemResponse` — Represents the yahoo email exists item response.
-- `YahooEmailExistsResponse` — Represents the yahoo email exists response.
+```json
+{
+  "YahooExistsValidator": {
+    "IntervalMs": 4000
+  }
+}
+```
 
-## API at a glance
+The default interval is 4,000 milliseconds. `EmailExists` executes through a shared named rate limiter using this spacing.
 
-| API | What it does | Result / important behavior |
-| --- | --- | --- |
-| `IYahooExistsValidator.EmailExists(email, cancellationToken)` | Checks whether the mailbox exists with the target email provider. | true if the mailbox exists; false if it does not; null when the provider cannot determine the result. |
-| `IYahooExistsValidator.EmailExistsWithoutLimit(email, cancellationToken)` | Checks whether the mailbox exists without applying the validator rate limit. | true if the mailbox exists; false if it does not; null when the provider cannot determine the result. |
-| `YahooExistsValidatorRegistrar.AddYahooExistsValidatorAsSingleton(services)` | Adds `IYahooExistsValidator` as a singleton service. | The same service collection, so additional registrations can be chained. |
-| `YahooExistsValidatorRegistrar.AddYahooExistsValidatorAsScoped(services)` | Adds `IYahooExistsValidator` as a scoped service. | The same service collection, so additional registrations can be chained. |
-| `YahooEmailExistsItemResponse.Error` | Gets or sets error. | Gets or sets error. |
-| `YahooEmailExistsItemResponse.Name` | Gets or sets name. | Gets or sets name. |
-| `YahooEmailExistsResponse.Errors` | Gets or sets errors. | Gets or sets errors. |
+## Check an identifier
 
-## Practical notes
+```csharp
+using Soenneker.Validators.Yahoo.Exists.Abstract;
 
-- Cancellation stops pending work; it does not undo work that has already completed.
-- Dispose instances you own when their scope ends so held resources can be released.
+bool? result = await validator.EmailExists(
+    "person@yahoo.com",
+    cancellationToken);
+```
+
+The validator loads Yahoo's signup page, extracts session cookies and hidden state, then submits the text before the first `@` as a proposed Yahoo user ID. It returns:
+
+- `true` when Yahoo reports `IDENTIFIER_NOT_AVAILABLE` or `IDENTIFIER_EXISTS` for `userId`;
+- `false` when the parsed response does not contain either marker;
+- `null` when the required signup cookies or session index cannot be extracted.
+
+HTTP failures, non-success status codes, response-deserialization failures, and cancellation propagate. `EmailExistsWithoutLimit` skips only the local rate limiter; it does not bypass Yahoo's limits.
+
+The method does not validate email syntax or require a Yahoo domain. `person@gmail.com` and `person@yahoo.com` both query the Yahoo identifier `person`, while input without `@` is submitted in full. Validate and normalize input before calling if that distinction matters.
+
+## Reliability and privacy
+
+This uses an undocumented signup endpoint and page structure. Yahoo can change the cookies, HTML, API response, or blocking behavior without notice, producing errors or incorrect results. It is not proof that a mailbox is reachable or owned by a user; send a verification message for ownership.
+
+The queried local part is disclosed to Yahoo. Full addresses are no longer included in this validator's logs, but request content may still appear in upstream HTTP infrastructure or Yahoo's logs. Ensure the check is compatible with privacy requirements and provider terms.

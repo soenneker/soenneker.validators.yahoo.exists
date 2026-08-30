@@ -18,7 +18,6 @@ using Soenneker.Validators.Yahoo.Exists.Utils;
 
 namespace Soenneker.Validators.Yahoo.Exists;
 
-/// <inheritdoc cref="IYahooExistsValidator"/>
 public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsValidator
 {
     private const string _signUpPage = "https://login.yahoo.com/account/create?specId=yidReg&lang=en-US&src=&done=https%3A%2F%2Fwww.yahoo.com&display=login";
@@ -55,14 +54,14 @@ public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsVali
 
     public async ValueTask<bool?> EmailExistsWithoutLimit(string email, CancellationToken cancellationToken = default)
     {
-        Logger.LogDebug("Checking if Yahoo account ({Email}) exists...", email);
+        Logger.LogDebug("Checking Yahoo identifier availability using the signup response heuristic");
 
         HttpClient client = await _httpClientCache.Get(nameof(YahooExistsValidator), cancellationToken: cancellationToken).NoSync();
         (string CookieString, string SessionIndex)? cookiesAndSessionIndex = await GetCookiesAndSessionIndex(client, cancellationToken).NoSync();
 
         if (cookiesAndSessionIndex == null)
         {
-            Logger.LogError("Failed to retrieve necessary data while checking if Yahoo account ({Email}) exists, exiting early", email);
+            Logger.LogError("Failed to retrieve the Yahoo signup session data; the result is indeterminate");
             return null;
         }
 
@@ -74,7 +73,7 @@ public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsVali
     {
         using var request = new HttpRequestMessage(HttpMethod.Get, _signUpPage);
         request.Headers.Add("User-Agent", _userAgent);
-        HttpResponseMessage response = await client.SendAsync(request, cancellationToken).NoSync();
+        using HttpResponseMessage response = await client.SendAsync(request, cancellationToken).NoSync();
 
         response.EnsureSuccessStatusCode();
 
@@ -105,7 +104,7 @@ public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsVali
 
     private async ValueTask<bool?> CheckEmailExists(HttpClient client, string email, string cookieString, string sessionIndex, CancellationToken cancellationToken)
     {
-        var httpContent = new FormUrlEncodedContent(new Dictionary<string, string>
+        using var httpContent = new FormUrlEncodedContent(new Dictionary<string, string>
         {
             {"acrumb", Regexes.Acrumb().Match(cookieString).Groups["acrumb"].Value},
             {"sessionIndex", sessionIndex},
@@ -113,7 +112,7 @@ public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsVali
             {"userId", email.Split('@')[0]}
         });
 
-        var postRequest = new HttpRequestMessage(HttpMethod.Post, _signUpApi)
+        using var postRequest = new HttpRequestMessage(HttpMethod.Post, _signUpApi)
         {
             Content = httpContent,
             Headers =
@@ -131,11 +130,11 @@ public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsVali
 
         if (emailExistsResponse?.Errors?.Exists(item => item.Name == "userId" && (item.Error == "IDENTIFIER_NOT_AVAILABLE" || item.Error == "IDENTIFIER_EXISTS")) == true)
         {
-            Logger.LogDebug("Yahoo account ({Email}) exists", email);
+            Logger.LogDebug("The Yahoo signup response matched the existing-identifier heuristic");
             return true;
         }
 
-        Logger.LogDebug("Yahoo account ({Email}) does NOT exist", email);
+        Logger.LogDebug("The Yahoo signup response did not match the existing-identifier heuristic");
         return false;
     }
 
@@ -144,7 +143,7 @@ public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsVali
     /// </summary>
     public void Dispose()
     {
-        _httpClientCache.RemoveSync(nameof(YahooExistsValidator));
+        // The cache is a shared singleton and owns the named client.
     }
 
     /// <summary>
@@ -153,6 +152,7 @@ public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsVali
     /// <returns>A task that represents the asynchronous operation.</returns>
     public ValueTask DisposeAsync()
     {
-        return _httpClientCache.Remove(nameof(YahooExistsValidator));
+        // The cache is a shared singleton and owns the named client.
+        return ValueTask.CompletedTask;
     }
 }

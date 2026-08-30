@@ -11,18 +11,18 @@ namespace Soenneker.Validators.Yahoo.Exists.Abstract;
 public interface IYahooExistsValidator : IValidator, IDisposable, IAsyncDisposable
 {
     /// <summary>
-    /// Checks whether the mailbox exists with the target email provider.
+    /// Applies a Yahoo signup-response heuristic through the shared rate limiter.
     /// </summary>
     /// <param name="email">Email address to validate or query.</param>
     /// <param name="cancellationToken">Token used to cancel the operation.</param>
-    /// <returns>true if the mailbox exists; false if it does not; null when the provider cannot determine the result.</returns>
+    /// <returns><see langword="true"/> when Yahoo reports the identifier unavailable or existing, <see langword="false"/> otherwise, or <see langword="null"/> when signup session data cannot be extracted.</returns>
     ValueTask<bool?> EmailExists(string email, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Checks whether the mailbox exists without applying the validator rate limit.
+    /// Applies the Yahoo signup-response heuristic without using the validator rate limiter.
     /// </summary>
     /// <param name="email">Email address to validate or query.</param>
     /// <param name="cancellationToken">Token used to cancel the operation.</param>
-    /// <returns>true if the mailbox exists; false if it does not; null when the provider cannot determine the result.</returns>
+    /// <returns><see langword="true"/> when Yahoo reports the identifier unavailable or existing, <see langword="false"/> otherwise, or <see langword="null"/> when signup session data cannot be extracted.</returns>
     ValueTask<bool?> EmailExistsWithoutLimit(string email, CancellationToken cancellationToken = default);
 }
