@@ -105,12 +105,13 @@ public sealed class YahooExistsValidator : Validator.Validator, IYahooExistsVali
 
     private async ValueTask<bool?> CheckEmailExists(HttpClient client, string email, string cookieString, string sessionIndex, CancellationToken cancellationToken)
     {
+        int atIndex = email.IndexOf('@');
         using var httpContent = new FormUrlEncodedContent(new Dictionary<string, string>
         {
             {"acrumb", Regexes.Acrumb().Match(cookieString).Groups["acrumb"].Value},
             {"sessionIndex", sessionIndex},
             {"specId", "yidReg"},
-            {"userId", email.Split('@')[0]}
+            {"userId", atIndex >= 0 ? email[..atIndex] : email}
         });
 
         using var postRequest = new HttpRequestMessage(HttpMethod.Post, _signUpApi)
