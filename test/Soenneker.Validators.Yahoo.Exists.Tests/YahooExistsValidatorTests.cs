@@ -23,7 +23,7 @@ public class YahooExistsValidatorTests : HostedUnitTest
 
     [Skip("Manual")]
     // [LocalOnly]
-    public async Task Exists_should_be_true()
+    public async ValueTask Exists_should_be_true()
     {
         bool? result = await _validator.EmailExists("logan@yahoo.com");
 
