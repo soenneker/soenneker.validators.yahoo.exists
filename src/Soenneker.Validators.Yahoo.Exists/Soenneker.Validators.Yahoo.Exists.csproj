@@ -46,10 +46,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Soenneker.Extensions.HttpClient" Version="4.0.4124" />
-        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="4.0.2115" />
-        <PackageReference Include="Soenneker.Utils.RateLimiting.Factory" Version="4.0.1213" />
-        <PackageReference Include="Soenneker.Validators.Validator" Version="4.0.745" />
+        <PackageReference Include="Soenneker.Extensions.HttpClient" Version="4.0.4130" />
+        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="4.0.2123" />
+        <PackageReference Include="Soenneker.Utils.RateLimiting.Factory" Version="4.0.1222" />
+        <PackageReference Include="Soenneker.Validators.Validator" Version="4.0.751" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.13" />
