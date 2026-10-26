@@ -49,7 +49,7 @@
         <PackageReference Include="Soenneker.Extensions.HttpClient" Version="4.0.4141" />
         <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="4.0.2128" />
         <PackageReference Include="Soenneker.Utils.RateLimiting.Factory" Version="4.0.1227" />
-        <PackageReference Include="Soenneker.Validators.Validator" Version="4.0.753" />
+        <PackageReference Include="Soenneker.Validators.Validator" Version="11.0.754" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="11.0.0-rc.3.26522.148" />
